@@ -12,22 +12,23 @@ class UsersService(Users):
 
     @staticmethod
     def CreateNewUser(login, password, secret_question, answer_to_secret_question):
-        # try:
-
+        try:
+            existing_users = UsersService._get_users_list()
             new_user={
+                "ID" : len(existing_users)+1,
                 "login" : login,
                 "password" : hashlib.md5(password.encode('utf-8')).hexdigest(),
                 "secret_question" : secret_question,
                 "answer_to_secret_question" : answer_to_secret_question
             }
-            existing_users = UsersService._get_users_list()
+
             existing_users.append(new_user)
             file = open("C:\\Users\\Eugen\\PycharmProjects\\HotelReservations\\Database\\UserCredentials.json", "w+")
             file.write(json.dumps(existing_users))
             file.close()
             return True
-        # except Exception:
-        #     return False
+        except:
+            return False
 
     @staticmethod
     def RestorePassword(login, answer_to_secret_question):
@@ -39,7 +40,8 @@ class UsersService(Users):
         if len(users_list) > 0:
             for user in users_list:
                 if user["login"] == login and user["password"] == hashlib.md5(password.encode('utf-8')).hexdigest():
-                    return True
+                    user_object = super().__init__(login, user["ID"], user["user_role"])
+                    return user_object
                 else:
                     return False
         else:

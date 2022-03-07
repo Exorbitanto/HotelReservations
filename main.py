@@ -19,6 +19,7 @@ if action == 1: #trying to authorize user
         if authorized == False:
             try_again = input("Access denied. Do you want to try again? (Y or N): ").upper()
         else:
+            try_again = "N"
             print(f"You have been successfully authorized, welcome {login}")
 
 elif action == 3: #trying to create a user
